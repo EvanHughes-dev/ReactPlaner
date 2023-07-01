@@ -4,16 +4,8 @@ import App from './App.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+root.render(<App />);
 
-RenderOBJ();
-//export default means this is the function to call in to import from
-export default function RenderOBJ() {
-    console.log("Render");
-    root.render(<App />);
-    
-    return "";
-
-}
 /*
 You are now watching
 the React file 'index.js'

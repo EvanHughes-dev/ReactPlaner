@@ -61,3 +61,30 @@ td:hover {
 .CalenderTable {
     display: revert;
 }
+
+
+
+.MonthTd {
+    width: 33.3333%;
+    height: 21.25%;
+    background: var(--backgroundBox);
+    text-align: center;
+}
+
+.MonthTH {
+    width: 900px;
+    height: 100px;
+    position: relative;
+    border: 1px solid black;
+    margin-bottom: 0px;
+    background: var(--backgroundHead);
+    color: white;
+    z-index: 1;
+}
+
+.monthButton{
+    width :100%;
+    height :100%;
+    background:none;
+    border:none;
+}
