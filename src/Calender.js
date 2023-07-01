@@ -12,7 +12,8 @@ var currentYear = 0;
 var currentDay = 0;
 
 var AllMonths = ["January", "Febuary", "March", "April", "May", "June", "July", "Agust", "September", "October", "November", "December"];
-const numOfLines = [0,1, 2, 3, 4, 5];
+const numOfRows = [0,1, 2, 3, 4, 5];
+const numOfColumns = [0,1, 2, 3, 4, 5, 6];
 
 var numAwayFromCurrentMonth=0;
 
@@ -40,19 +41,12 @@ export default function Calender() {//creates the main calender
             </caption>
 
             <tr>
-                <th width="122"> Sunday </th>
-                <th width="122"> Monday </th>
-                <th width="122"> Tuesday </th>
-                <th width="122"> Wednesday </th>
-                <th width="122"> Thursday </th>
-                <th width="122"> Friday </th>
-                <th width="122"> Saturday </th>
-
-
+                {numOfColumns.map(ReturnDayOfWeek)}
             </tr>
-            { numOfLines.map(returnDates)}
-            
+            { numOfRows.map(returnDates)}
+            <div>test</div>
         </table>
+       
         );
 
     return (
@@ -122,4 +116,10 @@ function CheckMonth() {
         CheckMonth();
 
     }
+}
+
+function ReturnDayOfWeek(index) {
+    
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wensday", "Thursday", "Friday", "Sunday"];
+    return <th width="122"> {daysOfWeek[index] } </th>
 }
