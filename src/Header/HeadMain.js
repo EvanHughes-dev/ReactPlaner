@@ -7,7 +7,7 @@ const NamesNeeded = ["Home","Links", "Add Event", "All Events"]//list of things 
 
 
 
-export default function CreateHeader() {
+export default function CreateHeader({id}) {
 	var head;
 	const [currentName, setName] = useState("Home");
 	

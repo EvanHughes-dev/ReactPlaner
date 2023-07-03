@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import './Calender.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //color conststatns
 const NotInCurrentMonthClr = "#808080";
@@ -37,7 +37,7 @@ const allRows = [row1Years, row2Years, row3Years];
 const numOfRows = [0,1, 2, 3, 4, 5];
 const numOfColumns = [0,1, 2, 3, 4, 5, 6];
 
-
+const BaseUrl = 'http://69.242.41.167:8082';
 
 /*example fetch statment
  *fetch('http://69.242.41.167:8082/api/login/')
@@ -55,9 +55,28 @@ const numOfColumns = [0,1, 2, 3, 4, 5, 6];
  * 
  */
 
+
 export default function Calender() {//creates the main calender
+   
+    
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch(BaseUrl + "/api/eventreader/6", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                setData(json);
+            });
+    }, []);
 
     
+
+   
 
 
     var date = new Date();
@@ -127,7 +146,7 @@ export default function Calender() {//creates the main calender
                     {/*Creates the sunday - monday*/ }
                     </tr>
 
-                {numOfRows.map(returnDates)}
+                {numOfRows.map((index)=>returnDates(index, data))}
                 {/*Creates the days*/}
                 </table>
         );
@@ -270,19 +289,22 @@ export default function Calender() {//creates the main calender
 
 
 // #region Day Assign
-function returnDates(row) {
+function returnDates(row, data) {
     const posInTable = [1 + (row * 7), 2 + (row * 7), 3 + (row * 7), 4 + (row * 7), 5 + (row * 7), 6 + (row * 7), 7 + (row * 7)];
 
-    
+    //data is all the events
     //handle setting the values here
     return (
         <tr>
-            {posInTable.map(returnDay) }
+            {posInTable.map((index)=>returnDay(index, data)) }
         </tr>
         );
 }
 
-function returnDay(CurrentBlock) {//logic for assigning day values
+function returnDay(CurrentBlock, data) {//logic for assigning day values
+    //data are all the events
+    
+    
     var day = 0;
     var DaysInMonth = new Date(currentYearSelected, currentMonthSelected + 1, 0).getDate();
     //plus one for month beacuse the returned month is a num from 0 to 11 while the new date takes a num from 1 to 12
@@ -293,8 +315,17 @@ function returnDay(CurrentBlock) {//logic for assigning day values
     var DayOfWeek = new Date(currentYearSelected, currentMonthSelected, 1).getDay(); // gets days used by the month before in first week
     //this figures out which dates to display
     var color = InCurrentMonthClr;//default color 
-    if (CurrentBlock <= DayOfWeek) {//days before current Month
 
+    var BoxMonth=currentMonthSelected+1;//the month the box is
+    var BoxYear=currentYearSelected;//the month the box is
+
+    if (CurrentBlock <= DayOfWeek) {//days before current Month
+        if (currentMonthSelected == 0) {//if the month is january, box month hsould be january
+            BoxMonth = 12;
+            BoxYear -= 1;
+        } else {
+            BoxMonth -= 1;
+        }
         day = MonthBeforeDays - (DayOfWeek - CurrentBlock);
 
         var tempYearBefore = 0;
@@ -317,7 +348,12 @@ function returnDay(CurrentBlock) {//logic for assigning day values
         }
 
     } else if (CurrentBlock > DaysInMonth + DayOfWeek) {//dates after current month
-
+        if (currentMonthSelected == 11) {//if the month is december, box month hsould be january
+            BoxMonth = 1;
+            BoxYear += 1;
+        } else {
+            BoxMonth += 1;
+        }
         day = CurrentBlock - (DaysInMonth + DayOfWeek);
 
         var tempYearBefore = 0;
@@ -345,29 +381,29 @@ function returnDay(CurrentBlock) {//logic for assigning day values
         }
 
     }
-    
-        
-       
-                
-            
-            
-    
+    var TextValue = "";
+    if (data != null) {
 
+        
+        for (var i = 0; i < data.length; i++) {
+          
+            if (data[i].month == BoxMonth && data[i].year == BoxYear && day == data[i].day) {
+                TextValue = TextValue + " " + data[i].title;
+            }
+        }
+    } 
     
     return (//handle the due box things here
         <td style={{ background:  color  }} class="CalenderTD">
             <p class="textArea"> {day}</p>
-            <div class="DueBox"> </div>
+            <div class="DueBox"> {TextValue }</div>
 
         </td>
         );
 }
 //#endregion
 
-function CheckMonth() {//checks to see if clcikinbg left and right changed the month
- 
-    
-}
+
 
 
 function ReturnDayOfWeek(index) {
@@ -392,3 +428,6 @@ function ReturnYearHeader() {
 
 }
 
+function getEvents() {
+   
+}
