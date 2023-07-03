@@ -1,11 +1,15 @@
-import Cal from './Calender.js'
+
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import Head from './Header/HeadMain.js'
 
 
 
 
 export default function App() {
-    return <Cal />
+    return (
+         <Head />
+          
+        
+    );
 
 }
