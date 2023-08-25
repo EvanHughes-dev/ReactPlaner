@@ -228,3 +228,7 @@ td:hover {
     overflow: hidden;
     text-align: left;
 }
+
+.TextObject{
+    margin:0px;
+}

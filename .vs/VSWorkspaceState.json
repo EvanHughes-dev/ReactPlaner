@@ -3,8 +3,8 @@
     "",
     "\\public",
     "\\src",
-    "\\src\\Header",
-    "\\src\\HomeFiles"
+    "\\src\\NewEvent"
   ],
+  "SelectedNode": "\\src\\NewEvent\\NewEvent.css",
   "PreviewInSolutionExplorer": false
 }

@@ -1,0 +1,6 @@
+.FetchError{
+    color:red;
+    font-size:20px;
+    position:absolute;
+    bottom:0px;
+}

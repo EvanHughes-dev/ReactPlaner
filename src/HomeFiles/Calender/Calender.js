@@ -37,45 +37,26 @@ const allRows = [row1Years, row2Years, row3Years];
 const numOfRows = [0,1, 2, 3, 4, 5];
 const numOfColumns = [0,1, 2, 3, 4, 5, 6];
 
-const BaseUrl = 'http://69.242.41.167:8082';
 
-/*example fetch statment
- *fetch('http://69.242.41.167:8082/api/login/')
-        .then(Response => {
 
-            if (Response == null) {
-                console.log("User Does Not Exist");
-            } else {//response comes as a text proimise
-                Response.text().then(
-                    function (value) { document.writeln(value)}
-                    )
-            }
-        });
- * 
- * 
- */
+
 
 
 export default function Calender() {//creates the main calender
-   
-    
-    const [data, setData] = useState(null);
-
-    useEffect(() => {
-        fetch(BaseUrl + "/api/eventreader/6", {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((json) => {
-                setData(json);
-            });
-    }, []);
-
+  
+   /* const [data, setData] = useState(null);*/
+    var data;
     
 
+    if (sessionStorage.getItem("data") != null) {
+        if (JSON.parse(sessionStorage.getItem("data")) != data) {
+            data = JSON.parse(sessionStorage.getItem("data"))
+        }
+
+    } else {
+        data = null;
+    }
+   // console.log(data);
    
 
 
@@ -85,7 +66,7 @@ export default function Calender() {//creates the main calender
     const [mode, setMode] = useState(1);
     
     currentDay = date.getDate();
-    currentMonth = (date.getMonth());
+    currentMonth = date.getMonth();
     
 
     if (currentMonth + MonthDistance < 0) {
@@ -279,10 +260,12 @@ export default function Calender() {//creates the main calender
           
             );
     }
+   
     return (
         <center>
             {cal}
         </center>
+     
         );
 
 }
@@ -303,8 +286,7 @@ function returnDates(row, data) {
 
 function returnDay(CurrentBlock, data) {//logic for assigning day values
     //data are all the events
-    
-    
+
     var day = 0;
     var DaysInMonth = new Date(currentYearSelected, currentMonthSelected + 1, 0).getDate();
     //plus one for month beacuse the returned month is a num from 0 to 11 while the new date takes a num from 1 to 12
@@ -381,22 +363,36 @@ function returnDay(CurrentBlock, data) {//logic for assigning day values
         }
 
     }
-    var TextValue = "";
+    var TextValue = [];
+   
     if (data != null) {
-
-        
+     
+       
         for (var i = 0; i < data.length; i++) {
           
             if (data[i].month == BoxMonth && data[i].year == BoxYear && day == data[i].day) {
-                TextValue = TextValue + " " + data[i].title;
+                if (TextValue == null) {
+                    TextValue[0] =  data[i].title;
+                } else {
+                    TextValue[TextValue.length] = data[i].title;
+                }
+               
             }
         }
     } 
-    
+
     return (//handle the due box things here
         <td style={{ background:  color  }} class="CalenderTD">
             <p class="textArea"> {day}</p>
-            <div class="DueBox"> {TextValue }</div>
+            <div class="DueBox"> {
+                TextValue.map((title)=>{
+                    return (
+                        
+                        <p class="TextObject">{title}</p>
+                        
+                            );
+                })
+            }</div>
 
         </td>
         );

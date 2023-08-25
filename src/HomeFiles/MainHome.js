@@ -1,9 +1,21 @@
 import Cal from "./Calender/Calender.js"
 
+import { useState } from "react";
 
-export default function MainPage() {
+import './MainHome.css';
 
-    return <Cal/>
+
+
+export default function MainPage({ id}) {
+
+
+    return (
+        <>
+            {/*SideBarElement*/}
+            < Cal id={id} />
+            
+        </>
+    );
 
 }
 

@@ -1,0 +1,46 @@
+
+
+.FormBackground {
+  
+    position:absolute;
+    height: 50%;
+    width: 40%;
+    margin-left: 30%;
+    margin-top: 5%;
+   
+}
+.FormHolder {
+    
+    height: 100%;
+    width: 100%;
+   
+}
+label{
+    margin:5px;
+}
+input, select{
+    margin:5px;
+    background-color:lightgrey;
+}
+
+.submitBtn{
+    background-color:black;
+    color:white;
+    border-color:white;
+}
+
+    .submitBtn:hover {
+        cursor: pointer;
+    }
+.resetBtn {
+    background-color: white;
+    color: black;
+}
+.resetBtn:hover {
+    cursor: pointer;
+}
+.btnHolder {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
