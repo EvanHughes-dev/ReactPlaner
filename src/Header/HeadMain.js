@@ -1,27 +1,37 @@
+
+
 import './HeaderMain.css'
 import HomeFiles from '../HomeFiles/MainHome.js'
 
-import * as React from 'react';
-import { useState, useEffect } from "react";
+import * as React from 'react'
+import { useState, useEffect } from "react"
 import profile from "./Assests/DefaultProfilePic.jpg"
 import '../NewEvent/NewEvent.css'
+import '../Schedule/Schedule.css'
 
-const NamesNeeded = ["Home", "Links", "Add Event", "All Events"]//list of things to have in the header
+//import { SchoologyAPI } from 'schoology-api';//https://github.com/hieyou1/schoology-api
+//const client_key = "db49cdf48e3fc60c7765e793f77ae628064e901c9";
+//const secret = "0c9ce84ea95389981f5301a9bcf2b6b5";
+//const client = new SchoologyAPI(client_key, secret, "https://schoology.dasd.org");
+
+const NamesNeeded = ["Home", "Links", "Add Event", "All Events", "Schedule"]//list of things to have in the header
 const BaseUrl = 'http://69.242.41.167:8082';
+
 
 
 var cat = "none";
 var date = -1;
 
 var title = "";
+var id;
 
-
-export default function CreateHeader({id}) {
+export default function CreateHeader({ id2 }) {
+	id=id
 	const [data, setData] = useState(null);
     const [UpdateData, UpdateDataFunc]=useState(false);
 	const [page, setPage] = useState(null);
 	const [currentName, setName] = useState("Home");
-
+	
 	const Form = () => {
 
 		return (
@@ -117,7 +127,7 @@ export default function CreateHeader({id}) {
 		 * updates when the user changes tabs on the page
 		 * or when it is triggered by the update data variable
 		 */
-		console.log("Ran");
+		
 		try {
 			
 			fetch(BaseUrl + "/api/eventreader/" + id, {
@@ -186,7 +196,7 @@ export default function CreateHeader({id}) {
 								sessionStorage.setItem("data", JSON.stringify(tempData));
 							}
 						}
-						console.log("Clicked");
+					
 						RemoveEvent(dataValue.id, id);
 					}} class="SideBarElement">{dataValue.title}</a>);
 				}
@@ -197,8 +207,7 @@ export default function CreateHeader({id}) {
 			SetSideBarItems(null);
 			
 		}
-		
-		
+
 
 	}, [data, Filter])
 
@@ -261,12 +270,18 @@ export default function CreateHeader({id}) {
     
 	
 	useEffect(() => {
-		
-			if (currentName == "Home") {
-				setPage( <HomeFiles />)
+
+		if (currentName == "Home") {
+			setPage(<HomeFiles />)
 		} else if (currentName == "Add Event") {
-				setPage(Form);
+			setPage(Form);
+		} else if (currentName == "Schedule") {
+		
+				setPage(Schedule());
 		}
+		else {
+			setPage(null);
+	}
 	},[data])
 
 	head = (
@@ -326,7 +341,7 @@ function RemoveEvent(idData, id) {
 			method: "DELETE",
 
 		})
-		console.log("Removed item with id of " + idData + " from user with id of " + id);
+		
 	}
 	catch (e) {
 		console.log(e);
@@ -335,13 +350,8 @@ function RemoveEvent(idData, id) {
 
 
 
-
-
-
-
-
-function HandleSubmit(e) {
-	console.log("Submit");
+function HandleSubmit(e) {//stops the form from refeshing page
+	
 	e.preventDefault();
 	document.getElementById('selectCat2').value = "none";
 	document.getElementById('Title').value = "";
@@ -357,3 +367,80 @@ function UpdateAll() {
 
 }
 
+
+//Schedule Section
+
+
+function Schedule() {
+	var schedule;
+	fetch(BaseUrl + "/api/Schedule", {
+		method: "GET",
+		headers: {
+			Accept: "application/json",
+		},
+	})
+		.then((response) => response.json())
+		.then((json) => {
+			schedule = json;
+			//console.log(json);
+		})
+		.catch(error => {
+			console.error(error);
+		});
+
+		
+
+
+	return (<div class="ScheduleMain">{schedule.map((thing)=>{
+		return (<div>
+			{
+
+				() => {
+					var ScheduleObject;
+					if (thing.First!=null) {
+
+                    }
+            }
+			}
+
+		</div>);
+
+	}) }</div>);
+}
+
+	function GetDayInfo() {
+
+
+	}
+
+	
+
+
+/*
+const uuid_1 = require("uuid");
+
+function getUnsignedAuthHeader() {
+	const REALM_PARAM = { 'OAuth realm': 'Schoology API' };
+	console.log(headerFormat(Object.assign(Object.assign(Object.assign({}, REALM_PARAM), getAuthHeaderComponents()), { oauth_signature: secret + '%26' })));
+	return headerFormat(Object.assign(Object.assign(Object.assign({}, REALM_PARAM), getAuthHeaderComponents()), { oauth_signature: secret + '%26' }));
+}
+
+function headerFormat(components) {
+	const parts = [];
+	Object.keys(components).forEach(key => parts.push(key + '="' + components[key] + '"'));
+	return parts.join(',');
+}
+
+function getAuthHeaderComponents(signatureMethod = 'PLAINTEXT', token = '') {
+	const nonce = (0, uuid_1.v4)();
+	const timestamp = Math.round(Date.now() / 1000);
+	return {
+		oauth_consumer_key: client_key,
+		oauth_nonce: nonce,
+		oauth_signature_method: signatureMethod,
+		oauth_timestamp: timestamp,
+		oauth_token: token,
+		oauth_version: '1.0',
+	};
+}
+*/

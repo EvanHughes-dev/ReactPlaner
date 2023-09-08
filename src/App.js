@@ -34,36 +34,30 @@ export default function App() {
 
             fetch(BaseUrl + "/api/login/google/" + info.sub, {
                 method: "GET",
+                headers: {
+                    Accept: "application/json",
+                },
                 //if the user does not yet exist, the user is generated automatically in backend
             }).catch(error => {
 
                 console.error(error);
                 
             })
-                .then(Response => {
-
-                    //response comes as a text proimise
-                    Response.text().then(
-                        function (value) {
-                         
-                           
-
-                                sessionStorage.setItem("CurrentUserID", value);
-                                setID(value);
-                                setLogin(true);
-                            
-                        }
-                    )
-
-
-                }
+            .then((response) => response.json())
+                .then((json) => {
+                   
+                    sessionStorage.setItem("CurrentUserID", json[0].id);
+                    setID(json[0].id);
+                    setLogin(true);
+                    
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+           
 
                     
-        ).catch (error => {
-
-            console.error(error);
-        
-        });
+   
             
             
 

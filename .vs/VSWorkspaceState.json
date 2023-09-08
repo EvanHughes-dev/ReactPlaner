@@ -1,10 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
     "\\src",
-    "\\src\\NewEvent"
+    "\\src\\NewEvent",
+    "\\src\\Schedule"
   ],
-  "SelectedNode": "\\src\\NewEvent\\NewEvent.css",
   "PreviewInSolutionExplorer": false
 }

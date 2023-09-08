@@ -1,108 +1,108 @@
 {
 
-  "homepage": "https://memelord2000880.github.io/ReactPlaner",
+    "homepage": "https://memelord2000880.github.io/ReactPlaner",
 
-  "name": "planer",
+    "name": "planer",
 
-  "version": "0.1.0",
+    "version": "0.1.0",
 
-  "private": true,
+    "private": true,
 
-  "dependencies": {
+    "dependencies": {
 
-    "@react-oauth/google": "^0.11.0",
+        "@react-oauth/google": "^0.11.0",
 
-    "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/jest-dom": "^5.16.5",
 
-    "@testing-library/react": "^13.4.0",
+        "@testing-library/react": "^13.4.0",
 
-    "@testing-library/user-event": "^13.5.0",
+        "@testing-library/user-event": "^13.5.0",
 
-    "axios": "^1.4.0",
+        "axios": "^1.4.0",
 
-    "cors": "^2.8.5",
+        "cors": "^2.8.5",
 
-    "express": "^4.18.2",
+        "express": "^4.18.2",
 
-    "flask-cors": "^0.0.1",
+        "flask-cors": "^0.0.1",
 
-    "formik": "^2.4.2",
+        "formik": "^2.4.2",
 
-    "jose": "^4.14.4",
+        "jose": "^4.14.4",
 
-    "path": "^0.12.7",
+        "path": "^0.12.7",
 
-    "react": "^18.2.0",
+        "react": "^18.2.0",
 
-    "react-dom": "^18.2.0",
+        "react-dom": "^18.2.0",
 
-    "react-google-login": "^5.2.2",
+        "react-google-login": "^5.2.2",
 
-    "react-scripts": "5.0.1",
+        "react-scripts": "5.0.1",
 
-    "url": "^0.11.1",
+        "url": "^0.11.1",
 
-    "web-vitals": "^2.1.4"
+        "web-vitals": "^2.1.4"
 
-  },
+    },
+  
+    "scripts": {
 
-  "scripts": {
+        "start": "react-scripts start",
 
-    "start": "react-scripts start",
+        "predeploy": "npm run build",
 
-    "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
 
-    "deploy": "gh-pages -d build",
+        "build": "react-scripts build",
 
-    "build": "react-scripts build",
+        "test": "react-scripts test",
 
-    "test": "react-scripts test",
+        "eject": "react-scripts eject"
 
-    "eject": "react-scripts eject"
+    },
 
-  },
+    "eslintConfig": {
 
-  "eslintConfig": {
+        "extends": [
 
-    "extends": [
+            "react-app",
 
-      "react-app",
+            "react-app/jest"
 
-      "react-app/jest"
+        ]
 
-    ]
+    },
 
-  },
+    "browserslist": {
 
-  "browserslist": {
+        "production": [
 
-    "production": [
+            ">0.2%",
 
-      ">0.2%",
+            "not dead",
 
-      "not dead",
+            "not op_mini all"
 
-      "not op_mini all"
+        ],
 
-    ],
+        "development": [
 
-    "development": [
+            "last 1 chrome version",
 
-      "last 1 chrome version",
+            "last 1 firefox version",
 
-      "last 1 firefox version",
+            "last 1 safari version"
 
-      "last 1 safari version"
+        ]
 
-    ]
+    },
 
-  },
+    "devDependencies": {
 
-  "devDependencies": {
+        "gh-pages": "^5.0.0"
 
-    "gh-pages": "^5.0.0"
-
-  }
+    }
 
 }
 
