@@ -3,24 +3,29 @@
 .FormBackground {
   
     position:absolute;
-    height: 50%;
-    width: 40%;
-    margin-left: 30%;
-    margin-top: 5%;
-   
-}
-.FormHolder {
-    
-    height: 100%;
+    height: 92%;
     width: 100%;
+    
+    
    
 }
-label{
-    margin:5px;
+.FormElement {
+   
+    margin-top: 12px;
+    
+    margin-right: 22px;
+    margin-left: 10px;
+    
 }
+
+label {
+  font-size:25px;
+}
+
 input, select{
     margin:5px;
     background-color:lightgrey;
+    font-size:20px;
 }
 
 .submitBtn{

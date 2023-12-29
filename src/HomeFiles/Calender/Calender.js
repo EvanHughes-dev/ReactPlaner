@@ -56,9 +56,6 @@ export default function Calender() {//creates the main calender
     } else {
         data = null;
     }
-   // console.log(data);
-   
-
 
     var date = new Date();
     const [MonthDistance, setMonth] = useState(0);
@@ -286,7 +283,7 @@ function returnDates(row, data) {
 
 function returnDay(CurrentBlock, data) {//logic for assigning day values
     //data are all the events
-
+  
     var day = 0;
     var DaysInMonth = new Date(currentYearSelected, currentMonthSelected + 1, 0).getDate();
     //plus one for month beacuse the returned month is a num from 0 to 11 while the new date takes a num from 1 to 12
@@ -330,7 +327,8 @@ function returnDay(CurrentBlock, data) {//logic for assigning day values
         }
 
     } else if (CurrentBlock > DaysInMonth + DayOfWeek) {//dates after current month
-        if (currentMonthSelected == 11) {//if the month is december, box month hsould be january
+        if (currentMonthSelected == 11) {
+            //if the month is december, box month should be january
             BoxMonth = 1;
             BoxYear += 1;
         } else {
@@ -369,12 +367,13 @@ function returnDay(CurrentBlock, data) {//logic for assigning day values
      
        
         for (var i = 0; i < data.length; i++) {
-          
-            if (data[i].month == BoxMonth && data[i].year == BoxYear && day == data[i].day) {
+            console.log(data[i].Month);
+            if (data[i].Month == BoxMonth && data[i].Year == BoxYear && day == data[i].Day) {
+                
                 if (TextValue == null) {
-                    TextValue[0] =  data[i].title;
+                    TextValue[0] =  data[i].Title;
                 } else {
-                    TextValue[TextValue.length] = data[i].title;
+                    TextValue[TextValue.length] = data[i].Title;
                 }
                
             }
@@ -404,7 +403,7 @@ function returnDay(CurrentBlock, data) {//logic for assigning day values
 
 function ReturnDayOfWeek(index) {
     
-    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wensday", "Thursday", "Friday", "Sunday"];
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wensday", "Thursday", "Friday", "Saturday"];
     return <th width="122"> {daysOfWeek[index] } </th>
 }
 
@@ -424,6 +423,3 @@ function ReturnYearHeader() {
 
 }
 
-function getEvents() {
-   
-}

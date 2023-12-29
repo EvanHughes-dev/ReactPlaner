@@ -1,4 +1,13 @@
-
+/*
+ * EHughes
+ * 
+ * Following proccesses:
+ * Create Section Header
+ * Decide which screen shoudl render
+ * Get data from db
+ * Create sidebar
+ *	Handle item delete
+ */
 
 import './HeaderMain.css'
 import HomeFiles from '../HomeFiles/MainHome.js'
@@ -6,119 +15,107 @@ import HomeFiles from '../HomeFiles/MainHome.js'
 import * as React from 'react'
 import { useState, useEffect } from "react"
 import profile from "./Assests/DefaultProfilePic.jpg"
-import '../NewEvent/NewEvent.css'
+import './NewEvent.css'
 import '../Schedule/Schedule.css'
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc, collection, query, where, getDocs, getDoc, updateDoc } from "firebase/firestore";
+const firebaseConfig = {
+	apiKey: "AIzaSyAYGEZ3ZAIu0w4tVthOvOu5YoAr2YZ-Pao",
+	authDomain: "planner-cffb8.firebaseapp.com",
+	projectId: "planner-cffb8",
+	storageBucket: "planner-cffb8.appspot.com",
+	messagingSenderId: "482765229023",
+	appId: "1:482765229023:web:dc47d16e7dd5a32a1f526a",
+	measurementId: "G-X0E8EZWHLE"
+};//firebaseinfo
 
-//import { SchoologyAPI } from 'schoology-api';//https://github.com/hieyou1/schoology-api
-//const client_key = "db49cdf48e3fc60c7765e793f77ae628064e901c9";
-//const secret = "0c9ce84ea95389981f5301a9bcf2b6b5";
-//const client = new SchoologyAPI(client_key, secret, "https://schoology.dasd.org");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const idRef = collection(db, "ID");
 
-const NamesNeeded = ["Home", "Links", "Add Event", "All Events", "Schedule"]//list of things to have in the header
+
+const NamesNeeded = ["Home", "Links", "Add Event", "Schedule"]//list of things to have in the header
 const BaseUrl = 'http://69.242.41.167:8082';
+const site_Base = 'https://schoology.dasd.org';
 
 
-
-var cat = "none";
+var SelectedCategory = "none";
 var date = -1;
 
 var title = "";
 var id;
 
-export default function CreateHeader({ id2 }) {
-	id=id
+const PossibleCategories = ["None", "Math", "English", "Biology", "Chemistry", "Physics", "Gobal Polotics", "German", "French", "Spanish", "Economics", "Enviromental", "Psychology", "Theory of Knowledge", "Design Technology", "Engineering", "Forensics", "Health & Med", "Sports Science", "Programming", "History"];
+
+
+export default function CreateHeader({ IDPass }) {
+	
+	id=IDPass
 	const [data, setData] = useState(null);
     const [UpdateData, UpdateDataFunc]=useState(false);
 	const [page, setPage] = useState(null);
 	const [currentName, setName] = useState("Home");
-	
-	const Form = () => {
+
+	//creates the add event tab page
+	const AddEventPage = () => {
 
 		return (
-			<div class="FormHolder">
+			
 				<form class="FormBackground" onSubmit={(e) => {
 					var day = date.getDate() + 1;
 					var month = date.getMonth() + 1;
 					var year = date.getFullYear();
-					var id = sessionStorage.getItem("CurrentUserID");
 					HandleSubmit(e);
-					const data={
+					const newData={
 						Title: title,
-						Tag: cat,
+						Tag: SelectedCategory,
 						Day: day,
 						Month: month,
 						Year: year
                     }
 					
-					try {
-						fetch(BaseUrl + "/api/eventreader/" + id , {
-							method: "POST",
-							headers: {
-								
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(data)
-								
-                            
-
-						}).then(() => {
-							
-							UpdateDataFunc(!UpdateData);//update data 
-						})
-
+				try {
+					SendData(newData, data);
+					UpdateDataFunc(!UpdateData)
 					}
 					catch (e) {
 						console.log(e);
 					}
 				}
 				}>
+				<div class="FormElement">
 					<label for="Title">Name of Event</label>
 					<input onChange={UpdateAll} name="Title" id="Title" type="text" required maxLength="22"  placeholder="Title.." />
-					<br />
+				
+				<div class="FormElement">
 					<label for="DatePicker" >Date</label>
 
 					<input type="date" onChange={UpdateAll} id="DatePicker" name="DatePicker" required />
+				</div>
 
-					<br />
+				<div class="FormElement">
 					<label for="selectCat">Category: </label>
 					<select name="selectCat" id="selectCat2" onChange={UpdateAll} required>
 
-						<option value="none">None</option>
-						<option value="math">Math</option>
-						<option value="lit">English</option>
-						<option value="bio">Biology</option>
-						<option value="chem">Chemistry</option>
-						<option value="physics">Physics</option>
-						<option value="glopo">Global Polotics</option>
-						<option value="german">German</option>
-						<option value="french">French</option>
-						<option value="spanish">Spanish</option>
-						<option value="econ">Economics</option>
-						<option value="enviro">Enviromental</option>
-						<option value="psych">Psychology</option>
-						<option value="tok">Theory of Knowledge</option>
-						<option value="designTech">Design Technology</option>
-						<option value="engi">Engineering</option>
-						<option value="foren">Forensics</option>
-						<option value="health&med">Health & Med</option>
-						<option value="sportSci">Sports Science</option>
-						<option value="prog">Programming</option>
-						<option value="his">History</option>
+						{PossibleCategories.map((value, index) => {
+							return (<option value={index }>{value}</option>);
+						})}
+						
 
 					</select>
-
+				</div>
 
 					<div class="btnHolder">
 						<input class="resetBtn" type="reset" />
 						<input class="submitBtn" type="submit" value="Create New Event" />
 					</div>
+				</div>
 				</form>
-			</div>
+			
 		);
 
 
 	}
-
 
 	useEffect(() => {
 
@@ -130,21 +127,15 @@ export default function CreateHeader({ id2 }) {
 		
 		try {
 			
-			fetch(BaseUrl + "/api/eventreader/" + id, {
-				method: "GET",
-				headers: {
-					Accept: "application/json",
-				},
+			
+			getData(id).then((newData) => {
+				
+				sessionStorage.setItem("data", JSON.stringify(newData))
+				setData(newData)
 			})
-				.then((response) => response.json())
-				.then((json) => {
-					setData(json);
-					sessionStorage.setItem("data", JSON.stringify(json));
-					//console.log(json);
-				})
-				.catch(error => {
-					console.error(error);
-				});
+
+			
+			
 		}
 		catch(e) {
 			console.log(e);
@@ -158,59 +149,61 @@ export default function CreateHeader({ id2 }) {
 
 	const [SideBar, DisplaySideBar] = useState(false);//should the sidebar be shown
 
-	const [Filter, UpdateFilter] = useState("none")
+	const [Filter, UpdateFilter] = useState("0");//filter values for sidebar
 
 	const [SideBarItems, SetSideBarItems] = useState(null);
 	const [SideBarElement, setSideBarElement] = useState(null);
 
 
 	
+	
+		useEffect(() => {
+			/*
+			 * this effect updates all the text objects on the side bar
+			 * it does so whenever data is updated
+			 * or when the filter is changed
+			*/
 
-	useEffect(() => {
-		/*
-		 * this effect updates all the text objects on the side bar
-		 * it does so whenever data is updated
-		 * or when the filter is changed
-		*/
-		if (JSON.stringify(data) !== '[]' && data != null) {
-			
-			SetSideBarItems(data.map((dataValue) => {
 
-				if (Filter == "none" || dataValue.tag == Filter) {
-					var tempData = [];
-					/*temp data is a copy of the data array, but not a
-					refrence to the same object
-					*/
-					return (<a onClick={() => {
-						for (let i = 0; i < data.length; i++) {
-							tempData[i] = data[i];
-
-						}
+			if (data !== '[]' && data != null )  {
+				SetSideBarItems(data.map((dataValue) => {
+					console.log(Filter)
+					if (Filter == "0" || dataValue.Tag == Filter) {
+						var tempData = [];
+						/*temp data is a copy of the data array, but not a
+						refrence to the same object
+						*/
 						
-						for (let i = 0; i < data.length; i++) {
-							if (data[i].id == dataValue.id) {
-							
-								tempData.splice(i, 1);
-
-								setData(tempData);
-								sessionStorage.setItem("data", JSON.stringify(tempData));
+						return (<a onClick={
+							() => {
+							for (let i = 0; i < data.length; i++) {
+								tempData[i] = data[i];
 							}
-						}
-					
-						RemoveEvent(dataValue.id, id);
-					}} class="SideBarElement">{dataValue.title}</a>);
-				}
 
-			}));
-		} else {
-			
-			SetSideBarItems(null);
-			
-		}
+							for (let i = 0; i < data.length; i++) {
+								if (data[i] == dataValue) {
+
+									tempData.splice(i, 1);
+
+									setData(tempData);
+									sessionStorage.setItem("data", JSON.stringify(tempData));
+								}
+							}
+
+							RemoveEvent( tempData);
+						}} class="SideBarElement">{dataValue.Title}</a>);
+					}
+
+				}));
+			} else {
+
+				SetSideBarItems(null);
+
+			}
 
 
-	}, [data, Filter])
-
+		}, [data, Filter])
+	
 	useEffect(() => {
 		
 		setSideBarElement(<>
@@ -222,27 +215,9 @@ export default function CreateHeader({ id2 }) {
 						}
 					} required>
 
-						<option value="none">None</option>
-						<option value="math">Math</option>
-						<option value="lit">English</option>
-						<option value="bio">Biology</option>
-						<option value="chem">Chemistry</option>
-						<option value="physics">Physics</option>
-						<option value="glopo">Global Polotics</option>
-						<option value="german">German</option>
-						<option value="french">French</option>
-						<option value="spanish">Spanish</option>
-						<option value="econ">Economics</option>
-						<option value="enviro">Enviromental</option>
-						<option value="psych">Psychology</option>
-						<option value="tok">Theory of Knowledge</option>
-						<option value="designTech">Design Technology</option>
-						<option value="engi">Engineering</option>
-						<option value="foren">Forensics</option>
-						<option value="health&med">Health & Med</option>
-						<option value="sportSci">Sports Science</option>
-						<option value="prog">Programming</option>
-						<option value="his">History</option>
+						{PossibleCategories.map((value, index) => {
+							return (<option value={index}>{value}</option>);
+						})}
 
 					</select>
 				</div>
@@ -274,7 +249,7 @@ export default function CreateHeader({ id2 }) {
 		if (currentName == "Home") {
 			setPage(<HomeFiles />)
 		} else if (currentName == "Add Event") {
-			setPage(Form);
+			setPage(AddEventPage);
 		} else if (currentName == "Schedule") {
 		
 				setPage(Schedule());
@@ -295,7 +270,7 @@ export default function CreateHeader({ id2 }) {
 					} return <a class="inactive" onClick={() => { setName(name); }}><button class="blankButton">{name}</button></a>
 				})}
 			</div>
-			<img class="ProfilePhoto" src={GetProfilePic()} onClick={() => { setProfileView(!ProfileView)} } alt="Profile"/>
+			<img class="ProfilePhoto" src={GetProfilePic()} onClick={() => { setProfileView(!ProfileView)} } alt=""/>
 				
 				
 			{() => {
@@ -323,6 +298,7 @@ function GetProfilePic() {
 	if (window.sessionStorage.getItem("CurrentProfilePhoto") == null) {
 		return { profile }
 	} else {
+		
 		return window.sessionStorage.getItem("CurrentProfilePhoto");
 	}
 }
@@ -335,12 +311,11 @@ function SetSideBarDistanceDistance(Distance) {
 	document.documentElement.style.setProperty('--SideBarDistance', Distance);
 }
 
-function RemoveEvent(idData, id) {
+async function RemoveEvent(dataToDelete) {
 	try {
-		fetch(BaseUrl + "/api/eventreader/" + id + "/" + idData, {
-			method: "DELETE",
-
-		})
+		await updateDoc(doc(idRef, id.toString()), {
+			EventArray: dataToDelete
+		});
 		
 	}
 	catch (e) {
@@ -361,7 +336,7 @@ function HandleSubmit(e) {//stops the form from refeshing page
 }
 
 function UpdateAll() {
-	cat = document.getElementById('selectCat2').value;
+	SelectedCategory = document.getElementById('selectCat2').value;
 	title = document.getElementById('Title').value;
 	date = new Date(document.getElementById('DatePicker').value);
 
@@ -382,30 +357,33 @@ function Schedule() {
 		.then((response) => response.json())
 		.then((json) => {
 			schedule = json;
-			//console.log(json);
+			
 		})
 		.catch(error => {
 			console.error(error);
 		});
 
 		
+	if (schedule != null) {
 
 
-	return (<div class="ScheduleMain">{schedule.map((thing)=>{
-		return (<div>
-			{
 
-				() => {
-					var ScheduleObject;
-					if (thing.First!=null) {
+		return (<div class="ScheduleMain">{schedule.map((thing) => {
+			return (<div>
+				{
 
-                    }
-            }
-			}
+					() => {
+						var ScheduleObject;
+						if (thing.First != null) {
 
-		</div>);
+						}
+					}
+				}
 
-	}) }</div>);
+			</div>);
+
+		})}</div>);
+	}
 }
 
 	function GetDayInfo() {
@@ -415,32 +393,30 @@ function Schedule() {
 
 	
 
+async function getData(id) {
+	
+	
+	const idDoc = await getDoc(doc(db, "ID", id.toString()));
+	var data;
 
-/*
-const uuid_1 = require("uuid");
+	
 
-function getUnsignedAuthHeader() {
-	const REALM_PARAM = { 'OAuth realm': 'Schoology API' };
-	console.log(headerFormat(Object.assign(Object.assign(Object.assign({}, REALM_PARAM), getAuthHeaderComponents()), { oauth_signature: secret + '%26' })));
-	return headerFormat(Object.assign(Object.assign(Object.assign({}, REALM_PARAM), getAuthHeaderComponents()), { oauth_signature: secret + '%26' }));
+		data = idDoc.data();//return the local id
+	
+
+		const events = data.EventArray;
+		return events;
+	
 }
 
-function headerFormat(components) {
-	const parts = [];
-	Object.keys(components).forEach(key => parts.push(key + '="' + components[key] + '"'));
-	return parts.join(',');
+async function SendData(newData, data) {
+	var newArray = [];
+	for (let i = 0; i < data.length; i++) {
+		newArray[i] = data[i];
+	}
+	newArray[newArray.length] =newData;
+	await updateDoc(doc(idRef, id.toString()), {
+		EventArray: newArray
+	});
 }
 
-function getAuthHeaderComponents(signatureMethod = 'PLAINTEXT', token = '') {
-	const nonce = (0, uuid_1.v4)();
-	const timestamp = Math.round(Date.now() / 1000);
-	return {
-		oauth_consumer_key: client_key,
-		oauth_nonce: nonce,
-		oauth_signature_method: signatureMethod,
-		oauth_timestamp: timestamp,
-		oauth_token: token,
-		oauth_version: '1.0',
-	};
-}
-*/

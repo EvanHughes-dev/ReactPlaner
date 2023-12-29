@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\src",
+    "\\src\\Header",
     "\\src\\NewEvent",
-    "\\src\\Schedule"
+    "\\src\\Secrets"
   ],
+  "SelectedNode": "\\src\\Header\\HeadMain.js",
   "PreviewInSolutionExplorer": false
 }
