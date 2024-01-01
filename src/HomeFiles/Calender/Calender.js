@@ -1,7 +1,16 @@
+/*
+ *EHughes 
+ * This file contains the following features
+ * Create the user's calender
+ * display user's events on the proper day
+ * Allow the user to switch between calender views
+ * Mark current day/month/year in seperate color then rest 
+ */
+
 import * as React from 'react';
 
 import './Calender.css'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 //color conststatns
 const NotInCurrentMonthClr = "#808080";
@@ -76,8 +85,6 @@ export default function Calender() {//creates the main calender
      *all calenders consist of a table
      * the CalenderMode.Day section is empty so far
      * Plan to have it display an enlarged view of a single day 
-     * Maybe with times?
-     * not needed for now
      */
     if (mode == CalenderMode.Day) {
 
@@ -409,7 +416,7 @@ function ReturnDayOfWeek(index) {//returns the day of week header
 }
 
 
-function CurrentDay(day, month, year) {
+function CurrentDay(day, month, year) {//Checks to see if the passed year is the current year
     if (day == currentDay && month == currentMonth && year == currentYear) {
         return true;
     }
@@ -417,7 +424,7 @@ function CurrentDay(day, month, year) {
 }
 
 
-function ReturnYearHeader() {
+function ReturnYearHeader() {//displays the year range for mode 3
 
     return (<div>{currentYearSelected - 4}-{ currentYearSelected+4}</div>)
 }

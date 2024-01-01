@@ -9,16 +9,16 @@
  *	Handle item delete
  */
 
-import './HeaderMain.css'
-import HomeFiles from '../HomeFiles/MainHome.js'
+import './HeaderMain.css';//css for file
+import HomeFiles from '../HomeFiles/MainHome.js'//next call for file
 
 import * as React from 'react'
 import { useState, useEffect } from "react"
-import profile from "./Assests/DefaultProfilePic.jpg"
-import './NewEvent.css'
-import '../Schedule/Schedule.css'
+import profile from "./Assests/DefaultProfilePic.jpg"//default user profile in case of error
+import './NewEvent.css';//new event styles
+import '../Schedule/Schedule.css';//not used yet
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, collection, query, where, getDocs, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, collection, getDoc, updateDoc } from "firebase/firestore";
 const firebaseConfig = {
 	apiKey: "AIzaSyAYGEZ3ZAIu0w4tVthOvOu5YoAr2YZ-Pao",
 	authDomain: "planner-cffb8.firebaseapp.com",
@@ -27,47 +27,49 @@ const firebaseConfig = {
 	messagingSenderId: "482765229023",
 	appId: "1:482765229023:web:dc47d16e7dd5a32a1f526a",
 	measurementId: "G-X0E8EZWHLE"
-};//firebaseinfo
+};//firebaseinfo will hide as secret later
 
+//initilize the firebase connection
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const idRef = collection(db, "ID");
 
 
 const NamesNeeded = ["Home", "Links", "Add Event", "Schedule"]//list of things to have in the header
-const BaseUrl = 'http://69.242.41.167:8082';
-const site_Base = 'https://schoology.dasd.org';
 
 
-var SelectedCategory = "none";
-var date = -1;
 
-var title = "";
-var id;
+var SelectedCategory = "none";//Category selected for new event
+var date = -1;//date selected for new event
+var eventTitle = "";//Name of new event
+
+var UserId;//user's id for database
 
 const PossibleCategories = ["None", "Math", "English", "Biology", "Chemistry", "Physics", "Gobal Polotics", "German", "French", "Spanish", "Economics", "Enviromental", "Psychology", "Theory of Knowledge", "Design Technology", "Engineering", "Forensics", "Health & Med", "Sports Science", "Programming", "History"];
 
 
 export default function CreateHeader({ IDPass }) {
 	
-	id=IDPass
-	const [data, setData] = useState(null);
-    const [UpdateData, UpdateDataFunc]=useState(false);
-	const [page, setPage] = useState(null);
-	const [currentName, setName] = useState("Home");
+	UserId=IDPass
+	const [data, setData] = useState(null);//data for events
+    const [UpdateData, UpdateDataFunc]=useState(false);//used to recall file
+	const [page, setPage] = useState(null);//represents the page to display
+	const [currentName, setName] = useState("Home");//tab that is selected
 
 	//creates the add event tab page
 	const AddEventPage = () => {
-
+		//page used by user to add new events
+		//displayed when user is on the "Add Event" tab
 		return (
 			
 				<form class="FormBackground" onSubmit={(e) => {
 					var day = date.getDate() + 1;
 					var month = date.getMonth() + 1;
 					var year = date.getFullYear();
-					HandleSubmit(e);
+				HandleSubmit(e);//stops submit from deleting data. This is handedled in SendData();
+				//format data in the form shown below
 					const newData={
-						Title: title,
+						Title: eventTitle,
 						Tag: SelectedCategory,
 						Day: day,
 						Month: month,
@@ -75,8 +77,8 @@ export default function CreateHeader({ IDPass }) {
                     }
 					
 				try {
-					SendData(newData, data);
-					UpdateDataFunc(!UpdateData)
+					SendData(newData, data);//update user's events in firebase. Data is array of data, newData is data to be added
+					UpdateDataFunc(!UpdateData);//have file reset data
 					}
 					catch (e) {
 						console.log(e);
@@ -128,10 +130,10 @@ export default function CreateHeader({ IDPass }) {
 		try {
 			
 			
-			getData(id).then((newData) => {
+			getData(UserId).then((newData) => {//getData returns a promise of data
 				
-				sessionStorage.setItem("data", JSON.stringify(newData))
-				setData(newData)
+				sessionStorage.setItem("data", JSON.stringify(newData));//allows data to be accessed anywhere in project
+				setData(newData);//refresh page
 			})
 
 			
@@ -140,9 +142,9 @@ export default function CreateHeader({ IDPass }) {
 		catch(e) {
 			console.log(e);
 		}
-	}, [UpdateData, currentName]);
+	}, [UpdateData, currentName]);//recall whenever tab or data is updated
 
-	var head;
+	var head;//header for file
 
 	
 	const [ProfileView, setProfileView] = useState(false);//should the profile be shown
@@ -165,9 +167,9 @@ export default function CreateHeader({ IDPass }) {
 			*/
 
 
-			if (data !== '[]' && data != null )  {
+			if (data !== '[]' && data != null )  {//if there are elements, create sidebar
 				SetSideBarItems(data.map((dataValue) => {
-					console.log(Filter)
+					
 					if (Filter == "0" || dataValue.Tag == Filter) {
 						var tempData = [];
 						/*temp data is a copy of the data array, but not a
@@ -183,21 +185,21 @@ export default function CreateHeader({ IDPass }) {
 							for (let i = 0; i < data.length; i++) {
 								if (data[i] == dataValue) {
 
-									tempData.splice(i, 1);
+									tempData.splice(i, 1);//remove data from the array
 
-									setData(tempData);
-									sessionStorage.setItem("data", JSON.stringify(tempData));
+									setData(tempData);//Set array data was removed to main array
+									sessionStorage.setItem("data", JSON.stringify(tempData));//pass to rest of project
 								}
 							}
 
-							RemoveEvent( tempData);
+							RemoveEvent( tempData);//remove data from firebase
 						}} class="SideBarElement">{dataValue.Title}</a>);
 					}
 
 				}));
 			} else {
 
-				SetSideBarItems(null);
+				SetSideBarItems(null);//if there are no events clear sidebar
 
 			}
 
@@ -205,6 +207,10 @@ export default function CreateHeader({ IDPass }) {
 		}, [data, Filter])
 	
 	useEffect(() => {
+		/*
+		 * creates the body and slide ability for sidebar
+		 * refreshes when the sidebar elements change
+		 */ 
 		
 		setSideBarElement(<>
 			<div class="SideBar">
@@ -216,7 +222,7 @@ export default function CreateHeader({ IDPass }) {
 					} required>
 
 						{PossibleCategories.map((value, index) => {
-							return (<option value={index}>{value}</option>);
+							return (<option value={index}>{value}</option>);//creates the ability to sort by category
 						})}
 
 					</select>
@@ -226,7 +232,7 @@ export default function CreateHeader({ IDPass }) {
 				
 				<button class="closebtn" onClick={() => {
 					DisplaySideBar(false);
-					SetSideBarDistanceDistance("0px");
+					SetSideBarDistanceDistance("0px");//turn sidebar off
 				}}>&#10097;</button>
 			</div>
 
@@ -234,29 +240,38 @@ export default function CreateHeader({ IDPass }) {
 		</>);
 
 	}, [SideBarItems])
-	var outBtn;
+	var outBtn;//opens sidebar
 	
 	if (!SideBar) {
 		outBtn = (<button class="openbtn" onClick={() => {
 			DisplaySideBar(true);
-			SetSideBarDistanceDistance("250px");
+			SetSideBarDistanceDistance("250px");//turn sidebar on
 		}}>&#10096;</button>);
 	} 
     
 	
 	useEffect(() => {
-
-		if (currentName == "Home") {
-			setPage(<HomeFiles />)
-		} else if (currentName == "Add Event") {
-			setPage(AddEventPage);
-		} else if (currentName == "Schedule") {
-		
+		/*
+		 * Decides which page to show
+		 * currentName is the section name user has selected
+		 * Refreshes on data
+		 */
+		switch (currentName) {
+			case "Home":
+				setPage(<HomeFiles />);
+				break;
+			case "Add Event":
+				setPage(AddEventPage);
+				break;
+			case "Schedule":
 				setPage(Schedule());
-		}
-		else {
-			setPage(null);
-	}
+				break;
+			default:
+				setPage(null);
+				break;
+        }
+		
+	
 	},[data])
 
 	head = (
@@ -294,7 +309,11 @@ export default function CreateHeader({ IDPass }) {
 
 function GetProfilePic() {
 	
-	
+	/*
+	 * displays the user's image if there is one
+	 * otherwise returns default image
+	 * Called from head = (); 
+	 */
 	if (window.sessionStorage.getItem("CurrentProfilePhoto") == null) {
 		return { profile }
 	} else {
@@ -308,19 +327,25 @@ function GetProfileView(){
 }
 
 function SetSideBarDistanceDistance(Distance) {
+	/*
+	 *Sets side of side bar
+	 * Called from outBtn & <button class="closebtn"></button>
+	 */
 	document.documentElement.style.setProperty('--SideBarDistance', Distance);
 }
 
 async function RemoveEvent(dataToDelete) {
-	try {
-		await updateDoc(doc(idRef, id.toString()), {
+	/*
+	 * removes data from firebase
+	 * datToDelete contains user data - data that was removed
+	 * Called from UseEffect(()=>{}, [data, Filter])
+	 */ 
+	
+		await updateDoc(doc(idRef, UserId.toString()), {
 			EventArray: dataToDelete
 		});
 		
-	}
-	catch (e) {
-		console.log(e);
-	}
+	
 }
 
 
@@ -337,7 +362,7 @@ function HandleSubmit(e) {//stops the form from refeshing page
 
 function UpdateAll() {
 	SelectedCategory = document.getElementById('selectCat2').value;
-	title = document.getElementById('Title').value;
+	eventTitle = document.getElementById('Title').value;
 	date = new Date(document.getElementById('DatePicker').value);
 
 }
@@ -347,43 +372,7 @@ function UpdateAll() {
 
 
 function Schedule() {
-	var schedule;
-	fetch(BaseUrl + "/api/Schedule", {
-		method: "GET",
-		headers: {
-			Accept: "application/json",
-		},
-	})
-		.then((response) => response.json())
-		.then((json) => {
-			schedule = json;
-			
-		})
-		.catch(error => {
-			console.error(error);
-		});
-
-		
-	if (schedule != null) {
-
-
-
-		return (<div class="ScheduleMain">{schedule.map((thing) => {
-			return (<div>
-				{
-
-					() => {
-						var ScheduleObject;
-						if (thing.First != null) {
-
-						}
-					}
-				}
-
-			</div>);
-
-		})}</div>);
-	}
+	//function not finished yet, but will return the school's schedule for the day
 }
 
 	function GetDayInfo() {
@@ -410,12 +399,17 @@ async function getData(id) {
 }
 
 async function SendData(newData, data) {
+
+	/*
+	 * 
+	 */ 
+
 	var newArray = [];
 	for (let i = 0; i < data.length; i++) {
 		newArray[i] = data[i];
 	}
 	newArray[newArray.length] =newData;
-	await updateDoc(doc(idRef, id.toString()), {
+	await updateDoc(doc(idRef, UserId.toString()), {
 		EventArray: newArray
 	});
 }
