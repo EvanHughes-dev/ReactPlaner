@@ -3,9 +3,7 @@
     "",
     "\\src",
     "\\src\\Header",
-    "\\src\\NewEvent",
-    "\\src\\Secrets"
+    "\\src\\NewEvent"
   ],
-  "SelectedNode": "\\src\\NewEvent",
   "PreviewInSolutionExplorer": false
 }
