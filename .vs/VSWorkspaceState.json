@@ -3,7 +3,9 @@
     "",
     "\\src",
     "\\src\\Header",
-    "\\src\\NewEvent"
+    "\\src\\Header\\Firebase",
+    "\\src\\Schedule"
   ],
+  "SelectedNode": "\\src\\Header\\ErrorStyles.css",
   "PreviewInSolutionExplorer": false
 }

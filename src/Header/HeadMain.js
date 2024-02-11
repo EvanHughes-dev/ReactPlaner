@@ -6,8 +6,9 @@
  * Decide which screen shoudl render
  * Get data from db
  * Create sidebar
- *	Handle item delete
+ * Handle item delete
  */
+
 
 import './HeaderMain.css';//css for file
 import HomeFiles from '../HomeFiles/MainHome.js'//next call for file
@@ -19,23 +20,19 @@ import './NewEvent.css';//new event styles
 import '../Schedule/Schedule.css';//not used yet
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, collection, getDoc, updateDoc } from "firebase/firestore";
-const firebaseConfig = {
-	apiKey: "AIzaSyAYGEZ3ZAIu0w4tVthOvOu5YoAr2YZ-Pao",
-	authDomain: "planner-cffb8.firebaseapp.com",
-	projectId: "planner-cffb8",
-	storageBucket: "planner-cffb8.appspot.com",
-	messagingSenderId: "482765229023",
-	appId: "1:482765229023:web:dc47d16e7dd5a32a1f526a",
-	measurementId: "G-X0E8EZWHLE"
-};//firebaseinfo will hide as secret later
+
+import plannerConfig from './Firebase/plannerFirebase.json'
+
+import chronosConfig from './Firebase/chronosFirebase.json'
 
 //initilize the firebase connection
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const idRef = collection(db, "ID");
+const plannerApp = initializeApp(plannerConfig);
+const plannerDB = getFirestore(plannerApp);
+const plannerIDRef = collection(plannerDB, "ID");
 
 
-const NamesNeeded = ["Home", "Links", "Add Event", "Schedule"]//list of things to have in the header
+
+const NamesNeeded = ["Home", "Links", "Add Event"]//list of things to have in the header
 
 
 
@@ -53,7 +50,7 @@ export default function CreateHeader({ IDPass }) {
 	UserId=IDPass
 	const [data, setData] = useState(null);//data for events
     const [UpdateData, UpdateDataFunc]=useState(false);//used to recall file
-	const [page, setPage] = useState(null);//represents the page to display
+	const [displayPageMain, setPage] = useState(null);//represents the page to display
 	const [currentName, setName] = useState("Home");//tab that is selected
 
 	//creates the add event tab page
@@ -263,9 +260,7 @@ export default function CreateHeader({ IDPass }) {
 			case "Add Event":
 				setPage(AddEventPage);
 				break;
-			case "Schedule":
-				setPage(Schedule());
-				break;
+			
 			default:
 				setPage(null);
 				break;
@@ -298,7 +293,7 @@ export default function CreateHeader({ IDPass }) {
 			
 			{SideBarElement}
 			{outBtn}
-			{page}
+			{displayPageMain}
 		</body>
 		);
 	
@@ -323,7 +318,8 @@ function GetProfilePic() {
 }
 
 function GetProfileView(){
-
+	//create a profile view when user clicks
+	
 }
 
 function SetSideBarDistanceDistance(Distance) {
@@ -341,11 +337,9 @@ async function RemoveEvent(dataToDelete) {
 	 * Called from UseEffect(()=>{}, [data, Filter])
 	 */ 
 	
-		await updateDoc(doc(idRef, UserId.toString()), {
+		await updateDoc(doc(plannerIDRef, UserId.toString()), {
 			EventArray: dataToDelete
 		});
-		
-	
 }
 
 
@@ -356,7 +350,6 @@ function HandleSubmit(e) {//stops the form from refeshing page
 	document.getElementById('selectCat2').value = "none";
 	document.getElementById('Title').value = "";
 	document.getElementById('DatePicker').value = null;
-	
 
 }
 
@@ -368,48 +361,36 @@ function UpdateAll() {
 }
 
 
-//Schedule Section
-
-
-function Schedule() {
-	//function not finished yet, but will return the school's schedule for the day
-}
-
-	function GetDayInfo() {
-
-
-	}
-
-	
-
 async function getData(id) {
+	/*
+	 * Gets data from firebase
+	 * id is the user's id value found in App.js and passed through
+	 */ 
 	
-	
-	const idDoc = await getDoc(doc(db, "ID", id.toString()));
+	const idDoc = await getDoc(doc(plannerDB, "ID", id.toString()));//get the user's doc
 	var data;
 
+		data = idDoc.data();//return the data
 	
-
-		data = idDoc.data();//return the local id
-	
-
-		const events = data.EventArray;
-		return events;
+		return data.EventArray;//return array of events
 	
 }
 
 async function SendData(newData, data) {
 
 	/*
-	 * 
+	 * Used to send new data to firebase
+	 * newData reprenst json object of new data
+	 * data is the existing data to add to
 	 */ 
 
-	var newArray = [];
+	var newArray = [];//array of data to add
 	for (let i = 0; i < data.length; i++) {
-		newArray[i] = data[i];
+		newArray[i] = data[i];//set a copy of data array
 	}
-	newArray[newArray.length] =newData;
-	await updateDoc(doc(idRef, UserId.toString()), {
+	newArray[newArray.length] = newData;//insert new data
+	//send data
+	await updateDoc(doc(plannerIDRef, UserId.toString()), {
 		EventArray: newArray
 	});
 }
