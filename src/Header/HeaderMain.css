@@ -39,21 +39,24 @@ body {
     height: 100%;
     width: 100%;
 }
-
-.ProfilePhoto {
-    border-radius: 50%;
-    
+.ProfileViewHolder{
     position: absolute;
     top: 5px;
-    right: 5px;
-    width: 40px;
-    height: 40px;
+    right: 20px;
+   
     z-index: 2;
 }
-.ProfilePhoto:hover{
-    cursor:pointer;
+.ProfilePhoto {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  
 }
 
+.LogOutBTN{
+    padding: 7px;
+    background-color:salmon;
+}
 
 .SideBar {
     height: 100%; /* 100% Full-height */
