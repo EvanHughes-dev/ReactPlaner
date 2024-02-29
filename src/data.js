@@ -6,16 +6,7 @@ import {
 } from "firebase/auth";
 
 import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAYGEZ3ZAIu0w4tVthOvOu5YoAr2YZ-Pao",
-  authDomain: "planner-cffb8.firebaseapp.com",
-  projectId: "planner-cffb8",
-  storageBucket: "planner-cffb8.appspot.com",
-  messagingSenderId: "482765229023",
-  appId: "1:482765229023:web:dc47d16e7dd5a32a1f526a",
-  measurementId: "G-X0E8EZWHLE",
-}; //firebase credentials. May want to hide later
+import firebaseConfig from "./Header/Firebase/plannerFirebase.json"
 
 const app = initializeApp(firebaseConfig); //get connection to app
 
