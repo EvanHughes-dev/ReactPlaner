@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 
 import { initializeApp } from "firebase/app";
-
+import firebaseConfig from "./Header/Firebase/plannerFirebase.json"
 const firebaseConfig = {
   apiKey: "AIzaSyAYGEZ3ZAIu0w4tVthOvOu5YoAr2YZ-Pao",
   authDomain: "planner-cffb8.firebaseapp.com",
