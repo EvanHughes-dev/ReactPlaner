@@ -1,0 +1,60 @@
+
+
+.FormBackground {
+   
+    overflow: hidden;
+    position:absolute;
+    
+    width:75%;
+    margin:3px;
+    padding:15px;
+   
+}
+.FormElement {
+   
+    margin-top: 17px;
+    
+   max-width: 70%;
+    margin-left: 10px;
+    padding:7px;
+    background-color:#8DBCBB;
+    
+}
+
+label {
+  font-size:25px;
+  margin-right:7px;
+}
+
+input, select{
+    margin:5px;
+    background-color:lightgrey;
+    font-size:20px;
+}
+
+.submitBtn{
+    background-color:  #005B9A;;
+    color:black;
+    border:none;
+    transition: 0.3s;
+    font-size: 25px;
+}
+
+    .submitBtn:hover {
+        cursor: pointer;
+        background-color:  black;
+        color:white;
+        font-size: 28px;
+    }
+.resetBtn {
+    background-color: white;
+   
+}
+.resetBtn:hover {
+    cursor: pointer;
+}
+.btnHolder {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}

@@ -1,0 +1,234 @@
+.Cal-header {
+    width: 900px;
+    height: 100px;
+    position: relative;
+    border: 1px solid black;
+    margin-bottom: 0px;
+    background: var(--backgroundHead);
+    color: white;
+    z-index: 1;
+    font-family: Arial;
+}
+
+
+
+:root {
+    --backgroundHead: #8DBCBB;
+    --backgroundHeader: #005B9A;
+    --backgroundBox: grey;
+}
+
+table {
+    margin-top: 20px;
+    
+    width: 900px;
+    height: 500px;
+    border: none;
+    background: #000;
+    table-layout: fixed;
+}
+
+
+table, th, td {
+    z-index: 1;
+    
+}
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: cadetblue;
+    user-select: none; /* Standard syntax  */
+    overflow-x: hidden;
+}
+
+
+th {
+    background-color: var(--backgroundHeader);
+    color: white;
+    width: 14.28571428571429%;
+    height: 15%;
+}
+
+
+.headerText {
+    /*this centers the text horizontally*/
+    justify-content: center;
+    /*this centers the text vertically*/
+    align-items: center;
+    font-family: sans-serif;
+    font-size: 70px;
+    background: none;
+    border: none;
+}
+
+td:hover {
+    opacity: 0.9;
+}
+
+.CalenderTD {
+    text-align: right;
+    vertical-align: top;
+    color: papayawhip;
+    background-color: var(--backgroundBox);
+    height: 13.33333333333333%;
+    width: 14.28571428571429%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+
+
+
+
+.MonthTd {
+    width: 33.3333%;
+    height: 21.25%;
+    background: var(--backgroundBox);
+    text-align: center;
+    
+    
+}
+
+.MonthTH {
+    width: 900px;
+    height: 100px;
+    position: relative;
+    border: 1px solid black;
+    margin-bottom: 0px;
+    background: var(--backgroundHead);
+    color: white;
+    z-index: 1;
+}
+
+.monthButton {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    font-size: 30px;
+}
+
+
+
+.YearTD {
+    width: 33.3333%;
+    height: 21.25%;
+    background: var(--backgroundBox);
+    text-align: center;
+}
+
+.Left {
+    left: 0px;
+    bottom: 0px;
+    width: 90px;
+    height: 70px;
+    border: none;
+    align-content: center;
+    justify-content:center;
+    font-size: 50px;
+    position: absolute;
+    background: none;
+}
+
+    .Left:hover {
+        transform: scale(1.1,1.1);
+    }
+
+.Left1 {
+    margin: 0px 0px 0px 5px;
+    position: absolute;
+    transition: 0.2s;
+}
+
+.Left2{
+    margin: 0px 0px 0px 25px;
+    transition:0.4s;
+}
+
+.Left:hover .Left2{
+    transform: translate(-30px, 0);
+    opacity:0;
+}
+
+
+.Right {
+    right: 0px;
+    bottom: -1px;
+    
+    
+    position: absolute;
+    width: 90px;
+    height: 70px;
+    border: none;
+    font-size: 50px;
+    background: none;
+}
+
+    .Right:hover {
+        transform: scale(1.1,1.1);
+    }
+
+.Right1 {
+    margin-right:  5px;
+    position: absolute;
+    transition: 0.2s;
+    right:5px;
+}
+
+.Right2 {
+    margin-right: 25px;
+    transition: 0.4s;
+}
+
+.Right:hover .Right2 {
+    transform: translate(30px, 0);
+    opacity: 0;
+}
+
+
+.textArea {
+    color: black;
+    margin-top: 0px;
+    text-align: right;
+    vertical-align: top;
+    margin-bottom: 0px;
+}
+
+.MainCalDisplayDate {
+    color: papayawhip;
+    margin-top: 10px;
+    text-align: right;
+    margin-right: 10px;
+    font-size: 30px;
+    vertical-align: top;
+    margin-bottom: 0px;
+}
+
+.DueBox {
+    display: block;
+    height: 60%;
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
+}
+
+.DueBox2 {
+    display: block;
+    height: 60%;
+    width: 95%;
+    margin-top: 15px;
+    margin-bottom: 14px;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
+}
+
+.TextObject{
+    margin:0px;
+}

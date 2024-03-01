@@ -1,0 +1,3 @@
+const AddEvent = () => {};
+
+export { AddEvent };
