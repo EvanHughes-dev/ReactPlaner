@@ -35,7 +35,7 @@ export default function App() {
   auth.onAuthStateChanged((newUser) => {
     setUser(newUser);
   });
-  console.log(sessionStorage.getItem("CurrentUserID"));
+  console.log(user);
   return (
     <Router>
       <Routes>

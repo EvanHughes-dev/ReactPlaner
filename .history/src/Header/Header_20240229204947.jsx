@@ -38,7 +38,7 @@ export default Header;
 const ProfileViewObject = () => {
   return (
     <div className="ProfileViewHolder">
-      <img className="ProfilePhoto" src={GetProfilePic()} alt={profile} />
+      <img className="ProfilePhoto" src={GetProfilePic()} alt="" />
     </div>
   );
 };
@@ -53,6 +53,7 @@ function GetProfilePic() {
   if (window.sessionStorage.getItem("CurrentProfilePhoto") === null) {
     return profile;
   } else {
+    console.log(window.sessionStorage.getItem("CurrentProfilePhoto"));
     return window.sessionStorage.getItem("CurrentProfilePhoto");
   }
 }

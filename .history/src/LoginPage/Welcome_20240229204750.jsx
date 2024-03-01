@@ -30,8 +30,8 @@ function WelcomeScreen() {
       if (data.uid !== null) {
         LoggedIn(data);
         nav("/Calender");
-      } else {
-        console.log(e);
+      }else{
+        console.log(e
       }
     });
   };
@@ -56,7 +56,7 @@ const LoggedIn = (userData) => {
   window.sessionStorage.setItem("CurrentProfilePhoto", userData.photoURL);
   Login(userData.uid).then((localID) => {
     //Login returns a promise with the local id for the database
-
+    console.log(localID);
     sessionStorage.setItem("CurrentUserID", localID); //set for refresh
   }); //end of Login().then(()=>{});
 };
