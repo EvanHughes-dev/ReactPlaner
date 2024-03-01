@@ -271,7 +271,6 @@
     "get-package-type": "^0.1.0",
     "get-stream": "^6.0.1",
     "get-symbol-description": "^1.0.0",
-    "gh-pages": "^5.0.0",
     "glob": "^7.2.3",
     "glob-parent": "^6.0.2",
     "glob-to-regexp": "^0.4.1",
@@ -850,5 +849,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
   }
 }
