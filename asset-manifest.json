@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ReactPlaner/static/css/main.58c643a1.css",
-    "main.js": "/ReactPlaner/static/js/main.05c4f04d.js",
+    "main.js": "/ReactPlaner/static/js/main.f7297f38.js",
     "static/media/DefaultProfilePic.jpg": "/ReactPlaner/static/media/DefaultProfilePic.6caeb1cab746387c3f23.jpg",
     "index.html": "/ReactPlaner/index.html",
     "main.58c643a1.css.map": "/ReactPlaner/static/css/main.58c643a1.css.map",
-    "main.05c4f04d.js.map": "/ReactPlaner/static/js/main.05c4f04d.js.map"
+    "main.f7297f38.js.map": "/ReactPlaner/static/js/main.f7297f38.js.map"
   },
   "entrypoints": [
     "static/css/main.58c643a1.css",
-    "static/js/main.05c4f04d.js"
+    "static/js/main.f7297f38.js"
   ]
 }
